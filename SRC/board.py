@@ -37,3 +37,4 @@ class Board:
 
         #King
         self.squares[row_other][4] = Square(row_other, 4, King(color))
+#test
