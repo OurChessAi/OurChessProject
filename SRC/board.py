@@ -6,6 +6,7 @@ from moves import Move
 class Board:
     def __init__(self):
         self.squares = [[0, 0, 0, 0, 0, 0, 0, 0] for col in range(COLS)]
+        self.last_move = None
         self._create()
         self._add_pieces('white')
         self._add_pieces('black')
@@ -46,10 +47,31 @@ class Board:
         self.squares[row_other][4] = Square(row_other, 4, King(color))
 
 
+    def move(self, piece, move):
+        first = move.first
+        final = move.final
+
+     # board gui move update
+        self.squares[first.row][first.col].piece = None
+        self.squares[final.row][final.col].piece = piece
+
+        #move
+        piece.moved = True
+
+        #clear valid moves
+        piece.clear_moves()
+
+        #set last move
+        self.last_move = move
+
+    def valid_move(self, piece, move):
+        return move in piece.moves
+
+
 
     def moves_calc(self,piece, row, col):
         """ Determine the valid moves of a piece on a specific square """
-        pass
+
 
         def pawn_move():
             # the steps a pawn can make

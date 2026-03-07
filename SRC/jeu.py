@@ -1,7 +1,7 @@
 #This is the game class ( game == jeu(french)) :)
 
 import pygame
-
+from pygame import surface
 
 from board import Board
 from dimensions import *
@@ -9,6 +9,8 @@ from drag import Drag
 class Jeu:
 
     def __init__(self):
+        self.next_player = 'white'
+        self.hovered_square = None
         self.board = Board()
         self.drag = Drag()
 
@@ -53,3 +55,32 @@ class Jeu:
                 #rectangle
                 rect = (move.final.col * SQSIZE, move.final.row * SQSIZE, SQSIZE, SQSIZE)
                 pygame.draw.rect(surface, color, rect)
+
+    def show_last_move(self, surface):
+        if self.board.last_move:
+            first= self.board.last_move.first
+            final= self.board.last_move.final
+
+            for pos in[first, final]:
+                # color
+                color = (244, 247, 116) if (pos.row ) % 2 == 0 else (172, 195, 51)
+                #rectangle
+                rect = (pos.col * SQSIZE, pos.row * SQSIZE, SQSIZE, SQSIZE)
+                #blit
+                pygame.draw.rect(surface, color, rect)
+
+    def show_hover(self, surface):
+        if self.hovered_square:
+            # color
+            color = (180, 180 , 180)
+            # rectangle
+            rect = (self.hovered_square.col * SQSIZE, self.hovered_square.row * SQSIZE, SQSIZE, SQSIZE)
+            # blit
+            pygame.draw.rect(surface, color, rect, width = 3)
+
+    # method for next player
+    def next_turn(self):
+        self.next_player = 'white' if self.next_player == 'black' else 'black'
+
+    def set_hover(self, row, col):
+        self.hovered_square = self.board.squares[row][col]
