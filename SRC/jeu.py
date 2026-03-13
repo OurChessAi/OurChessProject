@@ -3,9 +3,12 @@
 import pygame
 from pygame import surface
 
+from SRC.square import Square
+from settings import Settings
 from board import Board
 from dimensions import *
 from drag import Drag
+from square import Square
 class Jeu:
 
     def __init__(self):
@@ -13,19 +16,32 @@ class Jeu:
         self.hovered_square = None
         self.board = Board()
         self.drag = Drag()
+        self.settings = Settings()
 
     #Board rendering methods
     def show_bg(self,surface):
+        theme = self.settings.theme
         for row in range(ROWS):
             for col in range(COLS):
-                if (row + col) % 2 == 0:
-                    color = (245, 230, 200) #Light_Brown
-                else :
-                    color = (190, 145, 95) #Dark_Brown
+                color = theme.bg.light if (row + col) % 2 == 0 else theme.bg.dark
 
                 rect =(col * SQSIZE, row * SQSIZE, SQSIZE, SQSIZE)
                 pygame.draw.rect(surface, color, rect)
 
+                #Rows coordinates
+                if col == 0:
+                    color = theme.bg.dark if (row + col) % 2 == 0 else theme.bg.light
+                    lbl = self.settings.font.render(str(ROWS-row), True, color)
+                    lbl_pos = (5, 5 + row * SQSIZE)
+                    #blit
+                    surface.blit(lbl,lbl_pos)
+                #Col coordinates
+                if row ==7:
+                    color = theme.bg.dark if (row + col) % 2 == 0 else theme.bg.light
+                    lbl = self.settings.font.render(str(Square.get_alphacol(col)), 1, color)
+                    lbl_pos = (col * SQSIZE + SQSIZE - 20, HEIGHT - 20)
+                    # blit
+                    surface.blit(lbl, lbl_pos)
 
 
 
@@ -45,25 +61,27 @@ class Jeu:
 
 
     def show_moves(self, surface):
+        theme = self.settings.theme
         if self.drag.dragging:
             piece = self.drag.piece
 
             # Iterate all valid moves
             for move in piece.moves:
                 #color
-                color = '#C86464' if (move.final.row + move.final.col) % 2 == 0 else '#C86464'
+                color = theme.moves.light if (move.final.row + move.final.col) % 2 == 0 else theme.moves.dark
                 #rectangle
                 rect = (move.final.col * SQSIZE, move.final.row * SQSIZE, SQSIZE, SQSIZE)
                 pygame.draw.rect(surface, color, rect)
 
     def show_last_move(self, surface):
+        theme = self.settings.theme
         if self.board.last_move:
             first= self.board.last_move.first
             final= self.board.last_move.final
 
             for pos in[first, final]:
                 # color
-                color = (244, 247, 116) if (pos.row ) % 2 == 0 else (172, 195, 51)
+                color = theme.trace.light if (pos.row ) % 2 == 0 else theme.trace.dark
                 #rectangle
                 rect = (pos.col * SQSIZE, pos.row * SQSIZE, SQSIZE, SQSIZE)
                 #blit
@@ -84,3 +102,15 @@ class Jeu:
 
     def set_hover(self, row, col):
         self.hovered_square = self.board.squares[row][col]
+
+    def change_theme(self):
+        self.settings.change_theme()
+
+    def play_sound(self, captured = False):
+        if captured:
+            self.settings.capture_sound.play()
+        else:
+            self.settings.move_sound.play()
+
+    def restart(self):
+        self.__init__()
