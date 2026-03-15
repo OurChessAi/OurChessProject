@@ -6,7 +6,7 @@ from board import Board
 from square import Square
 from jeu import Jeu
 from moves import Move
-
+from SRC.ai_player import AIPlayer
 
 from dimensions import *
 
@@ -17,17 +17,43 @@ class Main:
         pygame.display.set_caption('Best Chess Game Ever')
         self.jeu = Jeu()
 
+        mode = input("Type 1 for PVP or 2 for PVAI: ").strip()
+        self.ai = AIPlayer(color = "black", depth = 2) if mode == "2" else None
+        self.pending_ai = False
+
     def mainloop(self):
         screen = self.screen
         game = self.jeu
         board = self.jeu.board
         drag = self.jeu.drag
+
         while True:
             game.show_bg(screen)
             game.show_last_move(screen)
             game.show_moves(screen)
             game.show_pieces(screen)
             game.show_hover(screen)
+            
+            if self.pending_ai and self.ai and game.next_player == self.ai.color:
+                                pygame.display.update()
+
+                                ai_choice = self.ai.choose_move(board)
+
+                                if ai_choice:
+                                    ai_move, ai_row, ai_col = ai_choice
+                                    ai_piece = board.squares[ai_row][ai_col].piece
+
+                                    if ai_piece:
+                                        ai_piece.clear_moves()
+                                        board.moves_calc(ai_piece, ai_row, ai_col, bool= True)
+
+                                        if board.valid_move(ai_piece, ai_move):
+                                            captured = board.squares[ai_move.final.row][ai_move.final.col].has_piece()
+                                            board.move(ai_piece, ai_move)
+                                            board.set_true_en_passant(ai_piece, ai_move)
+                                            game.play_sound(captured)
+                                            game.next_turn()
+                                self.pending_ai = False
 
             if drag.dragging:
                 drag.update_blit(screen)
@@ -96,6 +122,9 @@ class Main:
                             game.show_pieces(screen)
                             #next turn
                             game.next_turn()
+
+                            if self.ai and game.next_player == self.ai.color: 
+                                 self.pending_ai = True
 
                     drag.undrag_piece()
 

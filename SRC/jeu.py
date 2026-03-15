@@ -3,7 +3,7 @@
 import pygame
 from pygame import surface
 
-from SRC.square import Square
+
 from settings import Settings
 from board import Board
 from dimensions import *

@@ -1,4 +1,3 @@
-from SRC.sound import Sound
 from square import Square
 from dimensions import *
 from piece import *

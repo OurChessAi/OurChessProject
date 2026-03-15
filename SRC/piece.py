@@ -25,7 +25,7 @@ class Piece:
     def clear_moves(self):
         self.moves = []
 
-
+#test
 class Pawn(Piece):
     def __init__(self, color):
         self.dir =-1 if color =="white" else 1
