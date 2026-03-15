@@ -6,7 +6,7 @@ from board import Board
 from square import Square
 from jeu import Jeu
 from moves import Move
-from SRC.ai_player import AIPlayer
+from ai_player import AIPlayer
 
 from dimensions import *
 

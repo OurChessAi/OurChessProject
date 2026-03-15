@@ -1,5 +1,5 @@
 import copy
-from SRC.ai_eval import eval_board
+from ai_eval import eval_board
 
 INF = float("inf")
 #generate all legal moves for color

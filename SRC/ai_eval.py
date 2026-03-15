@@ -1,5 +1,5 @@
 from piece import Pawn, Knight, Bishop, Rook, Queen, King
-from SRC.piece_tables import *
+from piece_tables import *
 
 PIECE_VALS = {
     Pawn: 100,

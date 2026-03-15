@@ -1,5 +1,5 @@
 import copy
-from SRC.ai_search import get_moves, negamax
+from ai_search import get_moves, negamax
 
 class AIPlayer:
     def __init__(self, color="black", depth=2):
