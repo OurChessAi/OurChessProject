@@ -155,8 +155,12 @@ class Main:
                             # next turn
                             game.next_turn()
 
-                            if self.ai and game.next_player == self.ai.color: 
-                                 self.pending_ai = True
+
+                            # in case this is needed 
+                            # if self.ai and game.next_player == self.ai.color:
+                            #     self.pending_ai = True
+                            # ── check for checkmate / stalemate ─────────────
+                            game.check_game_over()
 
                     drag.undrag_piece()
 
