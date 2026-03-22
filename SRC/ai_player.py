@@ -1,4 +1,5 @@
 import copy
+import random
 from ai_search import get_moves, negamax
 
 class AIPlayer:
@@ -7,8 +8,7 @@ class AIPlayer:
         self.depth = depth
 
     def choose_move(self, board):
-        best_move = None
-        best_score = float("-inf")
+        scored_moves = []
         #determines color sign pos(white) or neg(black)
         color_sign = 1 if self.color == "white" else -1
         #Alpha-beta startin bounds
@@ -25,10 +25,16 @@ class AIPlayer:
             #evaluate score based on the negamax 
             score= -negamax(temp_board, self.depth -1, -beta, -alpha, -color_sign)
             #update best move when better score
-            if score> best_score:
-                best_score = score
-                best_move = (move, row, col)
-            #update alpha bound
+            scored_moves.append((score, move, row, col))
             if score > alpha:
                 alpha = score
-        return best_move
+        if not scored_moves:
+            return None
+        
+        scored_moves.sort(key=lambda x: x[0],reverse = True)
+        best_score = scored_moves[0][0]
+
+        possible_moves = [m for m in scored_moves if m[0] >= best_score - 25]
+        score, move, row, col = random.choice(possible_moves)
+        return(move, row, col)
+        
