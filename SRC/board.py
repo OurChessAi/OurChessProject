@@ -1,4 +1,3 @@
-from sound import Sound
 from square import Square
 from dimensions import *
 from piece import *
@@ -15,6 +14,7 @@ class Board:
         self._create()
         self._add_pieces('white')
         self._add_pieces('black')
+        self.move_count = 0
 
     def _create(self):
         for row in range(ROWS):
@@ -97,6 +97,7 @@ class Board:
 
         # set last move
         self.last_move = move
+        self.move_count += 1
 
     def valid_move(self, piece, move):
         return move in piece.moves
