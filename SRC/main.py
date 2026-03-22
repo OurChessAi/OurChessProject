@@ -16,7 +16,7 @@ class Main:
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         pygame.display.set_caption('Best Chess Game Ever')
         self.jeu = Jeu()
-
+        #Ask for PVP or PVAI
         mode = input("Type 1 for PVP or 2 for PVAI: ").strip()
         self.ai = AIPlayer(color = "black", depth = 2) if mode == "2" else None
         self.pending_ai = False

@@ -2,7 +2,7 @@ import copy
 from ai_search import get_moves, negamax
 
 class AIPlayer:
-    def __init__(self, color="black", depth=2):
+    def __init__(self, color="black", depth=4):
         self.color = color
         self.depth = depth
 
