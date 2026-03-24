@@ -37,25 +37,27 @@ class Main:
             game.show_hover(screen)
             
             if self.pending_ai and self.ai and game.next_player == self.ai.color:
-                                pygame.display.update()
+                pygame.display.update()
 
-                                ai_choice = self.ai.choose_move(board)
+                ai_choice = self.ai.choose_move(board)
 
-                                if ai_choice:
-                                    ai_move, ai_row, ai_col = ai_choice
-                                    ai_piece = board.squares[ai_row][ai_col].piece
+                if ai_choice:
+                    ai_move, ai_row, ai_col = ai_choice
+                    ai_piece = board.squares[ai_row][ai_col].piece
 
-                                    if ai_piece:
-                                        ai_piece.clear_moves()
-                                        board.moves_calc(ai_piece, ai_row, ai_col, bool= True)
+                    if ai_piece:
+                        ai_piece.clear_moves()
+                        board.moves_calc(ai_piece, ai_row, ai_col, bool= True)
 
-                                        if board.valid_move(ai_piece, ai_move):
-                                            captured = board.squares[ai_move.final.row][ai_move.final.col].has_piece()
-                                            board.move(ai_piece, ai_move)
-                                            board.set_true_en_passant(ai_piece, ai_move)
-                                            game.play_sound(captured)
-                                            game.next_turn()
-                                self.pending_ai = False
+                        if board.valid_move(ai_piece, ai_move):
+                            captured = board.squares[ai_move.final.row][ai_move.final.col].has_piece()
+                            board.move(ai_piece, ai_move)
+                            board.set_true_en_passant(ai_piece, ai_move)
+                            game.play_sound(captured)
+                            game.next_turn()
+                            # Check for checkmate
+                            game.check_game_over()
+                self.pending_ai = False
 
             if drag.dragging:
                 drag.update_blit(screen)
@@ -154,6 +156,8 @@ class Main:
                             game.show_pieces(screen)
                             # next turn
                             game.next_turn()
+                            # check for checkmate
+                            game.check_game_over()
 
                             if self.ai and game.next_player == self.ai.color: 
                                  self.pending_ai = True
