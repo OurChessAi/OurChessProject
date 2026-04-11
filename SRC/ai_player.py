@@ -23,13 +23,8 @@ class AIPlayer:
                 board.unmake_move()
                 continue
 
-            score = -negamax(board, self.depth - 1, -beta, -alpha, -color_sign)
+            score = -negamax(board, self.depth, -beta, -alpha, -color_sign)
             board.unmake_move()
-
-            scored_moves.append((score, move, row, col))
-
-            if score > alpha:
-                alpha = score
             scored_moves.append((score,move,row,col))
 
             if score>alpha:

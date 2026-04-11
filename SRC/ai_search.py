@@ -15,7 +15,7 @@ def get_moves(board,color):
                 
                 if piece.color == color:
                     piece.clear_moves()
-                    board.moves_calc(piece, row, col, bool = True)
+                    board.moves_calc(piece, row, col, bool = False)
                     for move in piece.moves: 
                         all_moves.append((piece, move, row, col))
     return all_moves
@@ -24,30 +24,22 @@ def negamax(board, depth,alpha, beta, color_sign):
     print("NEGAMAX CALLED WITH DEPTH =", depth)
     #base has eval board when depth is 0
     if depth == 0:
-            return color_sign * eval_board(board)
-    
+        return color_sign * eval_board(board)
     color = "white" if color_sign == 1 else "black"
-    moves = get_moves(board, color)
-    print("Depth:", depth, "Moves:", len(moves))
-    #if no given moves then eval the given board
+    moves = get_moves(board, "white" if color_sign == 1 else "black")
+
     if not moves:
-         return color_sign * eval_board(board)
-    
-    best_score = float("-inf")
+        return color_sign * eval_board(board)
     for piece, move, row, col in moves:
-         temp_board = copy.deepcopy(board) 
-         temp_piece = temp_board.squares[row][col].piece
+        board.make_move(piece, move)
+        if board.is_in_check(color):
+            board.unmake_move()
+            continue
+        score = -negamax(board, depth - 1, -beta, -alpha, -color_sign)
+        board.unmake_move()
 
-         temp_board.move(temp_piece, move)
-         #recursive method for negamax
-         score = -negamax(temp_board, depth - 1, -beta, -alpha, -color_sign)
-
-         if score > best_score:
-              best_score = score
-              #alpha bound update
-         if score > alpha:
-              alpha = score
-              #stop searching bad case
-         if alpha >= beta:
-              break
-    return best_score
+        if score> alpha:
+            alpha = score
+        if alpha >= beta:
+            break
+    return alpha

@@ -115,7 +115,7 @@ class Board:
         self.make_move(piece,move)
         in_check = self.is_in_check(piece.color)
         self.unmake_move()
-        return self.in_check
+        return in_check
 
     # Cleanup: track pos of king, then check if opp moves can attack it
     def is_in_check(self, color):
@@ -354,14 +354,17 @@ class Board:
             piece,
             move.first.row, move.first.col,
             move.final.row, move.final.col,
-            captured
+            captured,
+            piece.moved
         ))
 
         self.squares[move.first.row][move.first.col].piece = None
         self.squares[move.final.row][move.final.col].piece = piece
+        piece.move = True
     def unmake_move(self):
-        piece, oldR, oldC, newR, newC, captured = self.history.pop()
+        piece, oldR, oldC, newR, newC, captured, was_moved = self.history.pop()
         self.squares[newR][newC].piece = None
         self.squares[oldR][oldC].piece = piece
+        piece.moved = was_moved
         if captured:
             self.squares[newR][newC].piece = captured
