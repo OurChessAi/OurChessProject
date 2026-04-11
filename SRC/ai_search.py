@@ -21,12 +21,14 @@ def get_moves(board,color):
     return all_moves
 #negamax seearch 
 def negamax(board, depth,alpha, beta, color_sign):
+    print("NEGAMAX CALLED WITH DEPTH =", depth)
     #base has eval board when depth is 0
     if depth == 0:
             return color_sign * eval_board(board)
     
     color = "white" if color_sign == 1 else "black"
     moves = get_moves(board, color)
+    print("Depth:", depth, "Moves:", len(moves))
     #if no given moves then eval the given board
     if not moves:
          return color_sign * eval_board(board)

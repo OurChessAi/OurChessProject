@@ -3,7 +3,7 @@ import random
 from ai_search import get_moves, negamax
 
 class AIPlayer:
-    def __init__(self, color="black", depth=4):
+    def __init__(self, color="black", depth=3):
         self.color = color
         self.depth = depth
 
@@ -18,15 +18,21 @@ class AIPlayer:
         all_moves = get_moves(board, self.color)
 
         for piece, move, row, col in all_moves:
-            temp_board = copy.deepcopy(board)
-            temp_piece = temp_board.squares[row][col].piece
+            board.make_move(piece, move)
+            if board.is_in_check(self.color):
+                board.unmake_move()
+                continue
 
-            temp_board.move(temp_piece, move)
-            #evaluate score based on the negamax 
-            score= -negamax(temp_board, self.depth -1, -beta, -alpha, -color_sign)
-            #update best move when better score
+            score = -negamax(board, self.depth - 1, -beta, -alpha, -color_sign)
+            board.unmake_move()
+
             scored_moves.append((score, move, row, col))
+
             if score > alpha:
+                alpha = score
+            scored_moves.append((score,move,row,col))
+
+            if score>alpha:
                 alpha = score
         if not scored_moves:
             return None

@@ -15,6 +15,7 @@ class Board:
         self._add_pieces('white')
         self._add_pieces('black')
         self.move_count = 0
+        self.history = []
 
     def _create(self):
         for row in range(ROWS):
@@ -111,11 +112,10 @@ class Board:
 
     # Refactor to use is_in_check; since moves_calc calls this, loop can desync
     def in_check(self, piece, move):
-        temp_piece = copy.copy(piece)
-        temp_board = copy.deepcopy(self)
-        temp_board.move(temp_piece, move, passanting=True)
-
-        return temp_board.is_in_check(piece.color)
+        self.make_move(piece,move)
+        in_check = self.is_in_check(piece.color)
+        self.unmake_move()
+        return self.in_check
 
     # Cleanup: track pos of king, then check if opp moves can attack it
     def is_in_check(self, color):
@@ -347,3 +347,21 @@ class Board:
                             (-1, 0), (0, 1),  (1, 0), (0, -1)])
         elif isinstance(piece, King):
             king_move()
+    def make_move(self, piece, move):
+        captured = self.squares[move.final.row][move.final.col].piece
+
+        self.history.append((
+            piece,
+            move.first.row, move.first.col,
+            move.final.row, move.final.col,
+            captured
+        ))
+
+        self.squares[move.first.row][move.first.col].piece = None
+        self.squares[move.final.row][move.final.col].piece = piece
+    def unmake_move(self):
+        piece, oldR, oldC, newR, newC, captured = self.history.pop()
+        self.squares[newR][newC].piece = None
+        self.squares[oldR][oldC].piece = piece
+        if captured:
+            self.squares[newR][newC].piece = captured

@@ -9,6 +9,9 @@ PIECE_VALS = {
     Queen: 900,
     King: 20000,
 }
+
+
+
 #returns base material value of piece
 def get_val(piece):
     for piece_type, val in PIECE_VALS.items():
