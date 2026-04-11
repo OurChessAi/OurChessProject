@@ -35,7 +35,7 @@ class AIPlayer:
         scored_moves.sort(key=lambda x: x[0],reverse = True)
         best_score = scored_moves[0][0]
         if board.move_count < 6:
-            possible_moves = [m for m in scored_moves if m[0] >= best_score - 10]
+            possible_moves = [m for m in scored_moves if m[0] >= best_score - 3]
             score, move, row, col = random.choice(possible_moves)
         else:
             score, move, row, col = scored_moves[0]

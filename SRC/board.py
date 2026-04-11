@@ -360,7 +360,7 @@ class Board:
 
         self.squares[move.first.row][move.first.col].piece = None
         self.squares[move.final.row][move.final.col].piece = piece
-        piece.move = True
+        piece.moved = True
     def unmake_move(self):
         piece, oldR, oldC, newR, newC, captured, was_moved = self.history.pop()
         self.squares[newR][newC].piece = None
