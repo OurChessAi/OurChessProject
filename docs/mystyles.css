@@ -81,3 +81,11 @@ header, nav, main, footer { display: block; }
     background-color:#231F20;
     color:#ffffff;
 }
+
+.pdf {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
