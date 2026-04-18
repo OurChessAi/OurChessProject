@@ -54,6 +54,10 @@ class Main:
                             board.move(ai_piece, ai_move)
                             board.set_true_en_passant(ai_piece, ai_move)
                             game.play_sound(captured)
+                            # AI always promotes to Queen
+                            if board.promotion_pending:
+                                from piece import Queen
+                                board.apply_promotion(Queen)
                             game.next_turn()
                             # Check for checkmate
                             game.check_game_over()
@@ -154,6 +158,11 @@ class Main:
                             game.show_bg(screen)
                             game.show_last_move(screen)
                             game.show_pieces(screen)
+
+                            # promotion picker
+                            if board.promotion_pending:
+                                self._resolve_promotion(screen, game, board)
+
                             # next turn
                             game.next_turn()
                             # check for checkmate
@@ -183,6 +192,28 @@ class Main:
                     sys.exit()
 
             pygame.display.update()
+
+
+    def _resolve_promotion(self, screen, game, board):
+        """Blocking loop: shows the picker until the player clicks a piece."""
+        clock = pygame.time.Clock()
+        while board.promotion_pending:
+            game.show_bg(screen)
+            game.show_last_move(screen)
+            game.show_pieces(screen)
+            rects = game.show_promotion_menu(screen)
+            pygame.display.update()
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    for cls, rect in rects.items():
+                        if rect.collidepoint(event.pos):
+                            board.apply_promotion(cls)
+                            break
+            clock.tick(60)
 
 
 main = Main()

@@ -9,6 +9,7 @@ from board import Board
 from dimensions import *
 from drag import Drag
 from square import Square
+from piece import Queen, Rook, Bishop, Knight
 
 
 class Jeu:
@@ -195,3 +196,29 @@ class Jeu:
 
     def restart(self):
         self.__init__()
+
+    def show_promotion_menu(self, surface):
+        """Draw the 4-piece promotion picker. Returns a dict of {piece_class: pygame.Rect}."""
+        color = self.board.promotion_color
+        choices = [Queen, Rook, Bishop, Knight]
+
+        box_size = SQSIZE
+        total_w  = box_size * len(choices)
+        start_x  = (WIDTH - total_w) // 2
+        start_y  = HEIGHT // 2 - box_size // 2
+
+        overlay = pygame.Surface((total_w + 20, box_size + 20), pygame.SRCALPHA)
+        overlay.fill((30, 30, 30, 210))
+        surface.blit(overlay, (start_x - 10, start_y - 10))
+
+        rects = {}
+        for i, cls in enumerate(choices):
+            tmp = cls(color)
+            tmp.set_texture(size=80)
+            img = pygame.image.load(tmp.texture)
+            rect = pygame.Rect(start_x + i * box_size, start_y, box_size, box_size)
+            pygame.draw.rect(surface, (255, 255, 255), rect, 2)
+            surface.blit(img, rect.topleft)
+            rects[cls] = rect
+
+        return rects

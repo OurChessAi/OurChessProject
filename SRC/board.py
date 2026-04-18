@@ -16,6 +16,10 @@ class Board:
         self._add_pieces('black')
         self.move_count = 0
         self.history = []
+        self.promotion_pending = False
+        self.promotion_row = None
+        self.promotion_col = None
+        self.promotion_color = None
 
     def _create(self):
         for row in range(ROWS):
@@ -105,7 +109,15 @@ class Board:
 
     def check_promotion(self, piece, final):
         if final.row == 0 or final.row == 7:
-            self.squares[final.row][final.col].piece = Queen(piece.color)
+            self.promotion_pending = True
+            self.promotion_row = final.row
+            self.promotion_col = final.col
+            self.promotion_color = piece.color
+
+    def apply_promotion(self, piece_class):
+        if self.promotion_pending:
+            self.squares[self.promotion_row][self.promotion_col].piece = piece_class(self.promotion_color)
+            self.promotion_pending = False
 
     def castling(self, initial, final):
         return abs(initial.col - final.col) == 2
