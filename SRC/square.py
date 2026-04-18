@@ -9,7 +9,7 @@ class Square:
         self.row = row
         self.col = col
         self.piece = piece
-        self.alphacol = self.ALPHACOLS[col]
+        self.alphacol = self.ALPHACOLS.get(col, None)
 
     def __eq__(self,other):
         return self.row == other.row and self.col == other.col
