@@ -233,7 +233,7 @@ class Main:
         mouse_pos = pygame.mouse.get_pos()
 
         # Title
-        title = title_font.render("Best Chess Game Ever", True, (255, 255, 255))
+        title = title_font.render("Chess", True, (255, 255, 255))
         title_rect = title.get_rect(center=(WIDTH // 2, HEIGHT // 4))
 
         # Buttons
