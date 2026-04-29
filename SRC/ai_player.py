@@ -11,7 +11,7 @@ class AIPlayer:
         scored_moves = []
         #determines color sign pos(white) or neg(black)
         color_sign = 1 if self.color == "white" else -1
-        #Alpha-beta startin bounds
+        #Alpha-beta starting bounds
         alpha = float("-inf")
         beta = float("inf")
         #generates all possible moves

@@ -194,7 +194,7 @@ class Board:
     def moves_calc(self, piece, row, col, bool=True):
         """Determine the valid moves of a piece on a specific square."""
 
-        # Addition of a helper function to validate and add moves
+        # helper function to validate and add moves
         def _append_move(first, final):
             move = Move(first, final)
             if bool:

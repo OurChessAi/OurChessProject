@@ -105,7 +105,6 @@ class Main:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 drag.update_mouse(event.pos)
 
-                # Bug #1 fix: clamp to board range to prevent out-of-bounds crash
                 clicked_row = min(drag.mouseY // SQSIZE, ROWS - 1)
                 clicked_col = min(drag.mouseX // SQSIZE, COLS - 1)
 
@@ -125,7 +124,6 @@ class Main:
 
             # mouse motion
             elif event.type == pygame.MOUSEMOTION:
-                # Bug #1 fix: clamp motion row/col to board range
                 motion_row = min(event.pos[1] // SQSIZE, ROWS - 1)
                 motion_col = min(event.pos[0] // SQSIZE, COLS - 1)
                 game.set_hover(motion_row, motion_col)
@@ -144,7 +142,6 @@ class Main:
                 if drag.dragging:
                     drag.update_mouse(event.pos)
 
-                    # Bug #1 fix: clamp released row/col to board range
                     released_row = min(drag.mouseY // SQSIZE, ROWS - 1)
                     released_col = min(drag.mouseX // SQSIZE, COLS - 1)
 
